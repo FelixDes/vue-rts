@@ -15,7 +15,7 @@ const store = useStore()
 const selectedEntity = computed(() => store.getters['game/getSelectedEntity'])
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .game-page {
   display: flex;
   flex-direction: column;

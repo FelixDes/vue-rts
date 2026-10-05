@@ -27,7 +27,7 @@ defineEmits(
     ['select'])
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .building {
   cursor: pointer;
 }

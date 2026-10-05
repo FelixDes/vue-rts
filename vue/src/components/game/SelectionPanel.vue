@@ -19,7 +19,7 @@ defineProps({
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .selection-panel {
   display: flex;
   justify-content: space-between;
@@ -28,9 +28,9 @@ defineProps({
   border-top: 1px solid #000;
   background: #eee;
   color: #000;
-}
 
-.selection-panel__hint {
-  color: #555;
+  &__hint {
+    color: #555;
+  }
 }
 </style>

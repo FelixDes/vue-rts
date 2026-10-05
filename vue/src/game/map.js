@@ -1,4 +1,4 @@
-export function createSquareMap(size) {
+export function createSquareMap(size, tileSize) {
     const halfSize = size / 2
 
     return {
@@ -8,10 +8,10 @@ export function createSquareMap(size) {
             minY: -halfSize,
             maxY: halfSize,
         },
+        tileSize: tileSize,
     }
 }
 
 export function createDefaultMap() {
-    return createSquareMap(4096)
-
+    return createSquareMap(4096, 64)
 }

@@ -160,7 +160,7 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .game-field {
   flex: 1;
   overflow: hidden;

@@ -36,7 +36,7 @@ defineProps({
 defineEmits(['select'])
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .unit {
   cursor: pointer;
 }
