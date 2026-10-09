@@ -1,18 +1,19 @@
 <template>
   <div class="game-page">
-    <GameField/>
-    <SelectionPanel :entity="selectedEntity"/>
+    <div class="game-page__field">
+      <GameField/>
+      <GameHud/>
+      <GameOverlay/>
+    </div>
+    <CommandPanel/>
   </div>
 </template>
 
 <script setup>
-import {computed} from 'vue'
-import {useStore} from 'vuex'
 import GameField from '@/components/game/GameField.vue'
-import SelectionPanel from '@/components/game/SelectionPanel.vue'
-
-const store = useStore()
-const selectedEntity = computed(() => store.getters['game/getSelectedEntity'])
+import GameHud from '@/components/game/GameHud.vue'
+import GameOverlay from '@/components/game/GameOverlay.vue'
+import CommandPanel from '@/components/game/CommandPanel.vue'
 </script>
 
 <style scoped lang="scss">
@@ -20,5 +21,12 @@ const selectedEntity = computed(() => store.getters['game/getSelectedEntity'])
   display: flex;
   flex-direction: column;
   height: 100vh;
+
+  &__field {
+    position: relative;
+    display: flex;
+    flex: 1;
+    min-height: 0;
+  }
 }
 </style>

@@ -1,30 +1,22 @@
 import {clamp} from './geometry.js'
+import {isoToWorld, worldToIso} from './projection.js'
 
 export const MIN_ZOOM = 0.25
 export const MAX_ZOOM = 3
 
-const ISO_ROTATION_DEGREES = 45
-const ISO_VERTICAL_SCALE = 0.5
-const ISO_ROTATION_RADIANS = ISO_ROTATION_DEGREES * Math.PI / 180
-const ISO_COS = Math.cos(ISO_ROTATION_RADIANS)
-const ISO_SIN = Math.sin(ISO_ROTATION_RADIANS)
-
-export function createCamera() {
+export function createCamera(position) {
     return {
-        x: 0,
-        y: 0,
+        x: position.x,
+        y: position.y,
         zoom: 1,
     }
 }
 
 function screenOffsetToWorldOffset(screenOffset, zoom) {
-    const unscaledX = screenOffset.x / zoom
-    const unsquashedY = screenOffset.y / zoom / ISO_VERTICAL_SCALE
-
-    return {
-        x: unscaledX * ISO_COS + unsquashedY * ISO_SIN,
-        y: unsquashedY * ISO_COS - unscaledX * ISO_SIN,
-    }
+    return isoToWorld({
+        x: screenOffset.x / zoom,
+        y: screenOffset.y / zoom,
+    })
 }
 
 function getOffsetFromScreenCenter(viewport, screenPoint) {
@@ -45,11 +37,11 @@ export function screenToWorld(camera, viewport, screenPoint) {
 }
 
 export function getCameraTransform(camera, viewport) {
+    const cameraOnScreen = worldToIso(camera)
     const translateToCenter = 'translate(' + viewport.width / 2 + ' ' + viewport.height / 2 + ')'
     const scale = 'scale(' + camera.zoom + ')'
-    const isometry = 'scale(1 ' + ISO_VERTICAL_SCALE + ') rotate(' + ISO_ROTATION_DEGREES + ')'
-    const translateToCamera = 'translate(' + -camera.x + ' ' + -camera.y + ')'
-    return translateToCenter + ' ' + scale + ' ' + isometry + ' ' + translateToCamera
+    const translateToCamera = 'translate(' + -cameraOnScreen.x + ' ' + -cameraOnScreen.y + ')'
+    return translateToCenter + ' ' + scale + ' ' + translateToCamera
 }
 
 function setCameraPosition(camera, position, bounds) {
@@ -78,4 +70,12 @@ export function zoomCameraAtScreenPoint(camera, viewport, screenPoint, zoomFacto
         x: worldPointUnderCursor.x - worldOffset.x,
         y: worldPointUnderCursor.y - worldOffset.y,
     }, bounds)
+}
+
+export function worldToScreen(camera, viewport, point) {
+    const offsetOnScreen = worldToIso({x: point.x - camera.x, y: point.y - camera.y})
+    return {
+        x: viewport.width / 2 + offsetOnScreen.x * camera.zoom,
+        y: viewport.height / 2 + offsetOnScreen.y * camera.zoom,
+    }
 }
